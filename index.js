@@ -19,7 +19,7 @@ const server = new ApolloServer({
 });
 
 const options = {
-  port: 4000,
+  port: 4002,
   endpoint: '/graphql',
   subscriptions: '/subscriptions',
   playground: '/playground',
