@@ -34,13 +34,13 @@ function summary(_, args, context, info) {
 function summaryByPage (_, args, context, info) {
     console.log("getPageURLsQuery");
     return new Promise ( ( resolve, reject ) => {
-        api.query(api.summaryByPage, {
+        api.query({urlBuilder: api.summaryByPage, params:{
             token: context.token,
             idSite: args.idSite,
             period: args.period,
             date: args.date,
             pageURL: args.pageURL
-        }).then(result => result[0])
+        }}).then(result => result[0])
         .then(result => resolve({
             nb_visits: result["nb_visits"],
             nb_uniq_visitors: result["nb_unique_visitors"],
@@ -66,13 +66,13 @@ function summaryByPage (_, args, context, info) {
 function summaryByDate (_, args, context, info) {
     console.log("summaryByDate")
     return new Promise ( ( resolve, reject ) => {
-        api.query(api.summaryByDate, {
+        api.query({urlBuilder: api.summaryByDate, params: {
             token: context.token,
             idSite: args.idSite,
             period: args.period,
             pageURL: args.pageURL,
             lastXDays: args.lastXDays
-        }).then(result => resolve({
+        }}).then(result => resolve({
             summary: result
         }));
     });
