@@ -25,15 +25,16 @@ function summary(_, args, context, info) {
             maxActions: result["max_actions"],
             bounceRate: result["bounce_rate"],
             numActionsPerVisit: result["nb_actions_per_visit"],
-            avgTimeOnSite: result["avg_time_on_site"]
+            avgTimeOnSite: result["avg_time_on_site"], 
+            nb_visits: result["nb_visits"],
         }));
     });
 }
 
-function getPageURL(_, args, context, info) {
+function summaryByPage (_, args, context, info) {
     console.log("getPageURLsQuery")
     return new Promise ( ( resolve, reject ) => {
-        api.getPageURL({
+        api.summaryByPage({
             token: context.token,
             idSite: sites[args.idSite],
             period: args.period,
@@ -60,7 +61,27 @@ function getPageURL(_, args, context, info) {
     });
 }
 
+
+function summaryByDate (_, args, context, info) {
+    console.log("summaryByDate")
+    return new Promise ( ( resolve, reject ) => {
+        api.summaryByDate({
+            token: context.token,
+            idSite: sites[args.idSite],
+            period: args.period,
+            date: args.date,
+            pageURL: args.pageURL,
+            dateString: args.dateString
+        }).then(result => resolve({
+            dates: result
+        }));
+    });
+}
+
+
+
 module.exports = {
     summary,
-    getPageURL
+    summaryByPage,
+    summaryByDate
 };
