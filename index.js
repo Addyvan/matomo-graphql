@@ -10,12 +10,17 @@ const schemaString = gql`
     scalar JSON
     
     type Query {
-        summary(idSite: IdSiteEnum, period: PeriodEnum, date: DateInput): Summary!
-        summaryByPage (idSite: IdSiteEnum, period: PeriodEnum!, date: DateInput!, pageURL: String!): SummaryByPage!,
+        summary(idSite: IdSiteEnum, 
+                period: PeriodEnum, 
+                date: DateInput): Summary!
+        summaryByPage (idSite: Int, 
+                        period: PeriodEnum!, 
+                        date: DateInput!, 
+                        pageURL: String!): SummaryByPage!,
         summaryByDate (idSite: IdSiteEnum, 
                       period: PeriodEnum!, 
                       pageURL: String, 
-                      lastXDays: Int): SummaryByDate
+                      lastXDays: Int): SummaryByDate!
     }
 
     type SummaryByPage{
@@ -61,6 +66,8 @@ const schemaString = gql`
 
     enum IdSiteEnum {
         all
+        #three can be changed to the name of a site by changing 
+        #the if block in summaryByDate function in matomo-rest 
         three
     }
 

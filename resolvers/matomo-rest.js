@@ -6,8 +6,6 @@ class MatomoAPI  {
     }
   
     async getSummary(params) {
-        console.log("getSummary")
-        console.log(params)
         if (params.pageURL === undefined && params.dateString === undefined){
             var url = this.baseURL + '?module=API&method=API.getBulkRequest&format=json&urls[0]=method%3dVisitsSummary.get&idSite='+ params.idSite +'&date='+ params.date.year +'-'+ params.date.month +'-'+ params.date.day +'&period='+ params.period +'&token_auth=' + params.token;
             return new Promise( ( resolve, reject ) => {
@@ -19,7 +17,6 @@ class MatomoAPI  {
     }
 
     async summaryByPage(params) {
-        console.log("getPageURLsMatomoRest")
         if (params.idSite == "three"){
             params.idSite = "3"
         }
@@ -27,12 +24,13 @@ class MatomoAPI  {
         return new Promise( ( resolve, reject ) => {
             fetch( url )
                 .then(response => {return response.json()} )
-                .then(result => {console.log(result);resolve(result[0])});
+                .then(result => {resolve(result[0])});
         }).catch(() => {assert.isNotOk(error,'Promise error')});
     }
 
     async summaryByDate(params) {
         if (params.pageURL === undefined){
+            //need to give a site or function returns nothing
             params.pageURL = "http://example.org/index.htm"
         }
         if (params.idSite == "three"){
@@ -42,7 +40,7 @@ class MatomoAPI  {
         return new Promise( ( resolve, reject ) => {
             fetch( url )
                 .then(response => {return response.json()} )
-                .then(result => {console.log(result);resolve(result)});
+                .then(result => {resolve(result)});
         }).catch(() => {assert.isNotOk(error,'Promise error')});
     }
 };
