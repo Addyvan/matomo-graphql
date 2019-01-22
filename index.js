@@ -12,7 +12,10 @@ const schemaString = gql`
     type Query {
         summary(idSite: IdSiteEnum, period: PeriodEnum, date: DateInput): Summary!
         summaryByPage (idSite: IdSiteEnum, period: PeriodEnum!, date: DateInput!, pageURL: String!): SummaryByPage!,
-        summaryByDate (idSite: Int, period: PeriodEnum!, date: DateInput, pageURL: String, dateString: String): SummaryByDate
+        summaryByDate (idSite: IdSiteEnum, 
+                      period: PeriodEnum!, 
+                      pageURL: String, 
+                      lastXDays: Int): SummaryByDate
     }
 
     type SummaryByPage{
@@ -47,7 +50,7 @@ const schemaString = gql`
     }
 
     type SummaryByDate {
-        dates: JSON
+        summary: JSON
     }
 
     input DateInput {
@@ -58,6 +61,7 @@ const schemaString = gql`
 
     enum IdSiteEnum {
         all
+        three
     }
 
     enum PeriodEnum {
@@ -65,24 +69,21 @@ const schemaString = gql`
         week,
         month,
         year,
-        range,
+        range
     }
 
 `;
 
 const resolvers = {
-  Query
+  Query,
+  JSON: GraphQLJSON
 }
 
 const env = process.env;
 
-const resolveFunctions = {
-  JSON: GraphQLJSON
-};
-
 const server = new ApolloServer({
   typeDefs: schemaString,
-  resolvers: resolveFunctions,
+  resolvers,
   context: ({req}) => ({
     ...req,
     token: env.MATOMO_TOKEN

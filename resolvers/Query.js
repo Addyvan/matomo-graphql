@@ -36,7 +36,7 @@ function summaryByPage (_, args, context, info) {
     return new Promise ( ( resolve, reject ) => {
         api.summaryByPage({
             token: context.token,
-            idSite: sites[args.idSite],
+            idSite: args.idSite,
             period: args.period,
             date: args.date,
             pageURL: args.pageURL
@@ -67,13 +67,12 @@ function summaryByDate (_, args, context, info) {
     return new Promise ( ( resolve, reject ) => {
         api.summaryByDate({
             token: context.token,
-            idSite: sites[args.idSite],
+            idSite: args.idSite,
             period: args.period,
-            date: args.date,
             pageURL: args.pageURL,
-            dateString: args.dateString
+            lastXDays: args.lastXDays
         }).then(result => resolve({
-            dates: result
+            summary: result
         }));
     });
 }
