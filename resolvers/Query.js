@@ -1,20 +1,20 @@
-const { MatomoAPI } = require('./matomo-rest');
+const { RestAPI } = require('./RestAPI');
 
-const api = new MatomoAPI();
+const api = new RestAPI("http://0.0.0.0:8000/");
 
 const sites = {
     all: "all"
 }
 
 function summary(_, args, context, info) {
-    console.log("summary")
     return new Promise ( ( resolve, reject ) => {
-        api.getSummary({
+        api.query({urlBuilder: api.getSummary, params: {
             token: context.token,
             idSite: sites[args.idSite],
             period: args.period,
             date: args.date
-        }).then(result => resolve({
+        }}).then(result => result[0][3])
+        .then(result => resolve({
             numUniqueVisitors: result["nb_uniq_visitors"],
             numUsers: result["nb_users"],
             numVisits: result["nb_visits"],
@@ -32,15 +32,16 @@ function summary(_, args, context, info) {
 }
 
 function summaryByPage (_, args, context, info) {
-    console.log("getPageURLsQuery")
+    console.log("getPageURLsQuery");
     return new Promise ( ( resolve, reject ) => {
-        api.summaryByPage({
+        api.query(api.summaryByPage, {
             token: context.token,
             idSite: args.idSite,
             period: args.period,
             date: args.date,
             pageURL: args.pageURL
-        }).then(result => resolve({
+        }).then(result => result[0])
+        .then(result => resolve({
             nb_visits: result["nb_visits"],
             nb_uniq_visitors: result["nb_unique_visitors"],
             nb_hits: result["nb_hits"],
@@ -65,7 +66,7 @@ function summaryByPage (_, args, context, info) {
 function summaryByDate (_, args, context, info) {
     console.log("summaryByDate")
     return new Promise ( ( resolve, reject ) => {
-        api.summaryByDate({
+        api.query(api.summaryByDate, {
             token: context.token,
             idSite: args.idSite,
             period: args.period,
