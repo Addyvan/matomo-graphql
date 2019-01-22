@@ -32,8 +32,11 @@ class RestAPI  {
         console.log("URL: " + url);
         return new Promise( ( resolve, reject ) => {
             fetch( this.endpoint + url )
-                .then(response => {
-                    return response.json()
+                .then(async (response) => {
+                    var json = await response.json();
+                    if (json.result === "error")
+                        console.log(json);
+                    return json;
                 })
                 .then(result => {resolve(result)});
             }).catch(() => {assert.isNotOk(error,'Promise error')});

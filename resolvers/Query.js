@@ -2,18 +2,33 @@ const { RestAPI } = require('./RestAPI');
 
 const api = new RestAPI("http://0.0.0.0:8000/");
 
+const dataError = (result) => {
+    if (result[0].result === "error") {
+        throw new Error("Data error");
+    } else {
+        return new Promise(function(resolve, reject) {
+            resolve(result)
+          });;
+    }
+}
+
 const sites = {
     all: "all"
 }
 
-function summary(_, args, context, info) {
+function summary(_, args, context, info, missingDataError) {
     return new Promise ( ( resolve, reject ) => {
         api.query({urlBuilder: api.getSummary, params: {
             token: context.token,
             idSite: sites[args.idSite],
             period: args.period,
             date: args.date
-        }}).then(result => result[0][3])
+        }}).then(dataError)
+        .catch(err => {
+            resolve(err);
+            return err;
+        })
+        .then(result => result[0][3])
         .then(result => resolve({
             numUniqueVisitors: result["nb_uniq_visitors"],
             numUsers: result["nb_users"],
@@ -40,7 +55,12 @@ function summaryByPage (_, args, context, info) {
             period: args.period,
             date: args.date,
             pageURL: args.pageURL
-        }}).then(result => result[0])
+        }}).then(dataError)
+        .catch(err => {
+            resolve(err);
+            return err;
+        })
+        .then(result => result[0])
         .then(result => resolve({
             nb_visits: result["nb_visits"],
             nb_uniq_visitors: result["nb_unique_visitors"],
@@ -72,7 +92,12 @@ function summaryByDate (_, args, context, info) {
             period: args.period,
             pageURL: args.pageURL,
             lastXDays: args.lastXDays
-        }}).then(result => resolve({
+        }}).then(dataError)
+        .catch(err => {
+            resolve(err);
+            return err;
+        })
+        .then(result => resolve({
             summary: result
         }));
     });

@@ -1,4 +1,4 @@
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer, ApolloError } = require("apollo-server");
 const Query = require("./resolvers/Query");
 const schemaString = require("./schema");
 const GraphQLJSON = require('graphql-type-json');
@@ -17,7 +17,7 @@ const server = new ApolloServer({
   context: ({req}) => ({
     ...req,
     token: env.MATOMO_TOKEN
-  }),
+  })
 });
 
 const options = {
