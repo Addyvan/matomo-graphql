@@ -59,7 +59,7 @@ const schemaString = gql`
     }
 
     input DateInput {
-        year: String! 
+        year: String!
         month: String!
         day: String! 
     }
@@ -105,5 +105,5 @@ const options = {
 };
 
 server.listen(options).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`)
+  console.log(`🚀 Server ready at ${url}`);
 });
